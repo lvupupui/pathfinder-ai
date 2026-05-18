@@ -73,6 +73,16 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
 GEMINI_API_KEY=your_gemini_api_key
 </code></pre>
 
+<h3>Developer notes (dev keyless Clerk mode)</h3>
+<p>
+  When developing locally you can run Clerk in "keyless" mode (no Clerk keys set). In
+  this state some routes that expect an authenticated user will be redirected to the
+  sign-in flow rather than crashing the server. If you want full dashboard behavior
+  (recommended), set `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` in
+  your `.env.local`.
+</p>
+
+
 <p>Generate the Prisma client:</p>
 
 <pre><code>npx prisma generate

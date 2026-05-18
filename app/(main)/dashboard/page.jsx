@@ -4,10 +4,14 @@ import { getUserOnboardingStatus } from "@/actions/user";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-  const { isOnboarded } = await getUserOnboardingStatus();
+  const { isOnboarded, user } = await getUserOnboardingStatus();
 
-  // If not onboarded, redirect to onboarding page
-  // Skip this check if already on the onboarding page
+  // If the request is unauthenticated (no Clerk user), redirect to sign-in.
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  // If authenticated but not onboarded, send them to onboarding
   if (!isOnboarded) {
     redirect("/onboarding");
   }

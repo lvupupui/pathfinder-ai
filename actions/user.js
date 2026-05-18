@@ -77,7 +77,15 @@ export async function updateUser(data) {
  */
 export async function getUserOnboardingStatus() {
   const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+
+  // In dev / keyless Clerk mode or unauthenticated requests, auth()
+  // may return no `userId`. Previously this threw which caused
+  // server rendering to fail (500) for pages like `/dashboard`.
+  // Return a safe unauthenticated fallback so server components
+  // can render gracefully and decide to redirect or show a CTA.
+  if (!userId) {
+    return { isOnboarded: false, user: null };
+  }
 
   /* 1 ▸ look up by Clerk ID */
   let user = await db.user.findUnique({
@@ -118,5 +126,5 @@ export async function getUserOnboardingStatus() {
     }
   }
 
-  return { isOnboarded: Boolean(user.industry) };
+  return { isOnboarded: Boolean(user.industry), user };
 }

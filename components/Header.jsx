@@ -30,8 +30,21 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   const { isSignedIn } = useAuth();
   const router = useRouter();
+  const [clerkKeyless, setClerkKeyless] = useState(false);
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    // Check dev status endpoint to detect Clerk keyless mode and show a banner
+    let mounted = true;
+    fetch('/api/dev/status')
+      .then((res) => res.json())
+      .then((data) => {
+        if (mounted && data?.clerkKeyless) setClerkKeyless(true);
+      })
+      .catch(() => {});
+    return () => (mounted = false);
+  }, []);
 
   const logoSrc = mounted && resolvedTheme === "dark" ? "/logo.png" : "/dark-logo.png";
 
@@ -50,6 +63,11 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
+      {clerkKeyless && (
+        <div className="w-full bg-yellow-100 text-yellow-800 text-sm py-1 text-center">
+          Clerk running in keyless dev mode — auth is disabled locally.
+        </div>
+      )}
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/">
