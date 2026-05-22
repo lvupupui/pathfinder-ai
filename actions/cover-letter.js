@@ -1,4 +1,4 @@
-"use server" || "use client"; // Retain your framework's directive
+"use client";
 
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -36,7 +36,7 @@ export default function CoverLetterGenerator() {
 
   useEffect(() => {
     if (generatedLetter) {
-      // 1. Check if the backend caught an AI error and returned a fallback payload
+      // Check if the backend caught an AI error and provided a fallback payload
       if (generatedLetter._errorCode) {
         let errorMessage = "AI generation failed. A basic fallback template has been generated.";
 
@@ -55,12 +55,11 @@ export default function CoverLetterGenerator() {
         }
 
         toast.warning(errorMessage, { duration: 6000 });
-        // Redirect the user anyway since a database fallback entry exists
         router.push(`/ai-cover-letter/${generatedLetter.id}`);
         return;
       }
 
-      // 2. Ideal path: AI generation succeeded perfectly
+      // Ideal path: AI generation succeeded perfectly
       toast.success("Cover letter generated successfully!");
       router.push(`/ai-cover-letter/${generatedLetter.id}`);
       reset();
