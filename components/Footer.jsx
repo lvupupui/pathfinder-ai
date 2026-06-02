@@ -94,8 +94,17 @@ export default function Footer() {
           <motion.div variants={fadeUp} className="flex flex-col gap-6">
             <h3 className="text-sm font-bold uppercase tracking-widest text-foreground">Explore</h3>
             <ul className="grid gap-3">
+              <li>
+                <button
+                  type="button"
+                  onClick={() => router.push("/dashboard")}
+                  className="group flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  <LayoutDashboard className="h-4 w-4 transition-transform group-hover:scale-110" />
+                  Dashboard
+                </button>
+              </li>
               {[
-                { label: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
                 { label: "Resume Builder", href: "/resume", Icon: FileText },
                 { label: "Mock Interviews", href: "/interview", Icon: Bot },
                 { label: "AI Cover Letter", href: "/ai-cover-letter", Icon: PenBox },
